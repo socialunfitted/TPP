@@ -23,15 +23,16 @@ async function navigate(page) {
 
   // Render page
   switch (page) {
-    case 'dashboard': await renderDashboard(); break;
-    case 'billing':   await renderBilling();   break;
-    case 'sales':     await renderSales();     break;
-    case 'customers': await renderCustomers(); break;
-    case 'products':  await renderProducts();  break;
-    case 'reports':   await renderReports();   break;
-    case 'expenses':  await renderExpenses();  break;
-    case 'settings':  await renderSettings();  break;
-    default:          await renderDashboard(); break;
+    case 'dashboard':     await renderDashboard();     break;
+    case 'billing':       await renderBilling();       break;
+    case 'sales':         await renderSales();         break;
+    case 'customers':     await renderCustomers();     break;
+    case 'products':      await renderProducts();      break;
+    case 'reports':       await renderReports();       break;
+    case 'expenses':      await renderExpenses();      break;
+    case 'settings':      await renderSettings();      break;
+    case 'subscriptions': await renderSubscriptions(); break;
+    default:              await renderDashboard();     break;
   }
 
   // Close mobile sidebar if open
@@ -111,6 +112,10 @@ function renderAppLayout() {
           <span class="nav-icon">👥</span>
           <span class="nav-label">Customers</span>
         </a>
+        <a class="nav-item" data-page="subscriptions" onclick="navigate('subscriptions')" id="nav-subscriptions">
+          <span class="nav-icon">⭐</span>
+          <span class="nav-label">Subscriptions</span>
+        </a>
         <a class="nav-item" data-page="products" onclick="navigate('products')" id="nav-products">
           <span class="nav-icon">📦</span>
           <span class="nav-label">Products</span>
@@ -169,9 +174,9 @@ function renderAppLayout() {
           <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">🧾</span></span>
           <span class="mobile-nav-label">Bill</span>
         </a>
-        <a class="mobile-nav-item" data-page="customers" onclick="navigate('customers')" id="mobile-nav-customers">
-          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">👥</span></span>
-          <span class="mobile-nav-label">Customers</span>
+        <a class="mobile-nav-item" data-page="subscriptions" onclick="navigate('subscriptions')" id="mobile-nav-subscriptions">
+          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">⭐</span></span>
+          <span class="mobile-nav-label">Subs</span>
         </a>
         <a class="mobile-nav-item" data-page="sales" onclick="navigate('sales')" id="mobile-nav-sales">
           <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">📋</span></span>

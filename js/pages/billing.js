@@ -61,6 +61,13 @@ function renderPOSLayout() {
 
       <!-- RIGHT: Cart -->
       <div class="pos-right" id="pos-cart-panel">
+        <!-- Mobile Close Button -->
+        <div class="mobile-cart-close-bar" id="mobile-cart-close-bar">
+          <button class="mobile-cart-back-btn" onclick="toggleMobileCart()" id="close-cart-btn">
+            ← Back to Products
+          </button>
+        </div>
+
         <!-- Customer Info -->
         <div class="cart-customer" id="cart-customer-section">
           ${renderCustomerSection()}
@@ -212,6 +219,12 @@ function renderBillSummary() {
 
 function renderCustomerSection() {
   if (currentCustomer) {
+    const subHtml = currentCustomer._activeSub
+      ? `<div class="cart-sub-info">⭐ ${escapeHTML(currentCustomer._activeSub.planType)} Sub — ${escapeHTML(currentCustomer._activeSub.productName || '')} (${currentCustomer._activeSub.dailyQty || 1}/day) · Expires ${formatDate(currentCustomer._activeSub.endDate)}</div>`
+      : '';
+    const dueHtml = (currentCustomer.outstandingDue || 0) > 0
+      ? `<div class="cart-due-warning">⚠️ Outstanding Due: ${formatCurrency(currentCustomer.outstandingDue)}</div>`
+      : '';
     return `
       <div class="customer-attached">
         <div class="customer-avatar">${getInitials(currentCustomer.name)}</div>
@@ -221,11 +234,13 @@ function renderCustomerSection() {
         </div>
         <button class="btn-icon-sm" onclick="clearCustomer()" title="Remove customer">✕</button>
       </div>
+      ${dueHtml}
+      ${subHtml}
     `;
   }
   return `
     <div class="customer-search-row">
-      <input type="text" id="customer-search-input" placeholder="👤 Search or add customer (C)" 
+      <input type="text" id="customer-search-input" placeholder="👤 Search or add customer" 
         oninput="searchCustomerInline(this.value)" autocomplete="off">
       <button class="btn btn-sm btn-outline" onclick="showAddCustomerModal()">+ New</button>
     </div>
@@ -287,13 +302,33 @@ function removeFromCart(idx) {
 
 function clearCart() {
   if (cart.length === 0) return;
-  showConfirm('Clear Cart', 'Remove all items from the cart?', () => {
-    cart = [];
-    currentCustomer = null;
-    saveCartToSession();
-    refreshCart();
-    document.getElementById('cart-customer-section').innerHTML = renderCustomerSection();
-  }, null, 'Clear Cart', 'btn-danger');
+  // Use a high-z-index confirm that works above the mobile cart panel
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay active';
+  overlay.id = 'clear-cart-confirm';
+  overlay.style.zIndex = '1200';
+  overlay.innerHTML = `
+    <div class="modal-box confirm-modal">
+      <div class="confirm-icon">🗑</div>
+      <h3>Clear Cart</h3>
+      <p>Remove all items from the cart?</p>
+      <div class="confirm-actions">
+        <button class="btn btn-outline" onclick="document.getElementById('clear-cart-confirm').remove()">Cancel</button>
+        <button class="btn btn-danger" onclick="_doClearCart()">Clear Cart</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function _doClearCart() {
+  document.getElementById('clear-cart-confirm')?.remove();
+  cart = [];
+  currentCustomer = null;
+  saveCartToSession();
+  refreshCart();
+  const sec = document.getElementById('cart-customer-section');
+  if (sec) sec.innerHTML = renderCustomerSection();
 }
 
 function refreshCart() {
@@ -359,6 +394,11 @@ async function searchCustomerInline(query) {
 async function selectCustomer(customerId) {
   const customer = await CustomersDB.get(customerId);
   if (!customer) return;
+  // Attach active subscription info if any
+  const subs = await SubscriptionsDB.getByCustomer(customerId);
+  const today = getDateString();
+  const activeSub = subs.find(s => s.status === 'ACTIVE' && s.endDate >= today);
+  customer._activeSub = activeSub || null;
   currentCustomer = customer;
   document.getElementById('cart-customer-section').innerHTML = renderCustomerSection();
 }
@@ -764,7 +804,13 @@ function showBillSuccess(bill, action) {
 
 function toggleMobileCart() {
   const cartPanel = document.getElementById('pos-cart-panel');
-  if (cartPanel) cartPanel.classList.toggle('mobile-open');
+  if (cartPanel) {
+    cartPanel.classList.toggle('mobile-open');
+    // Scroll cart to top when opening
+    if (cartPanel.classList.contains('mobile-open')) {
+      cartPanel.scrollTop = 0;
+    }
+  }
 }
 
 // ── GLOBAL BILL ACTIONS ──

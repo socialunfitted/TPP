@@ -43,7 +43,12 @@ function getCurrentDateTime() {
 }
 
 function getDateString(date = new Date()) {
-  return date.toISOString().slice(0, 10);
+  // Use local date components (not UTC) so IST (UTC+5:30) dates are correct.
+  // toISOString() returns UTC which can be "yesterday" in India for evening bills.
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
 function getTodayLabel() {
