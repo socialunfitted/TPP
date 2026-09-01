@@ -796,75 +796,194 @@ table { border-collapse: collapse; width: 100%; }
 /* Category Tabs */
 .category-tabs {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   overflow-x: auto;
   flex-shrink: 0;
-  padding-bottom: 4px;
+  padding: 2px 2px 8px 2px;
 }
 .category-tabs::-webkit-scrollbar { height: 3px; }
 .cat-tab {
   flex-shrink: 0;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-full);
   border: 1.5px solid var(--border);
   background: var(--bg-card);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.2s ease;
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
-.cat-tab:hover { border-color: var(--brand-yellow); color: var(--brand-yellow); }
-.cat-tab.active { background: var(--brand-yellow); border-color: var(--brand-yellow); color: var(--brand-black); }
+.cat-tab:hover {
+  border-color: var(--brand-yellow);
+  color: var(--brand-yellow-dark);
+  background: #FFFBF0;
+  transform: translateY(-1px);
+}
+.cat-tab.active {
+  background: var(--brand-yellow);
+  border-color: var(--brand-yellow);
+  color: var(--brand-black);
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(245,166,35,0.35);
+}
 
 /* Product Grid */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 14px;
   overflow-y: auto;
   flex: 1;
-  padding-right: 4px;
+  padding: 4px 4px 16px 0;
+  align-content: start; /* Prevents cards from stretching vertically to fill screen */
 }
+
 .product-card {
   background: var(--bg-card);
   border: 1.5px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 14px 12px;
+  border-radius: var(--radius-lg);
+  padding: 12px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.22s ease;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  align-self: start;
   user-select: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-.product-card:hover { border-color: var(--brand-yellow); box-shadow: var(--shadow-yellow); transform: translateY(-2px); }
-.product-card:active { transform: scale(0.97); }
-.product-card.in-cart { border-color: var(--brand-yellow); background: var(--brand-yellow-pale); }
-.product-name { font-size: 13px; font-weight: 700; color: var(--text-primary); line-height: 1.3; }
-.product-tamil { font-size: 11px; color: var(--text-tamil); font-family: 'Noto Sans Tamil', sans-serif; }
-.product-price { font-size: 18px; font-weight: 800; color: var(--brand-yellow-dark); margin-top: 4px; }
-.product-size { font-size: 10px; color: var(--text-muted); }
+
+.product-card:hover {
+  border-color: var(--brand-yellow);
+  box-shadow: 0 8px 24px rgba(245, 166, 35, 0.22);
+  transform: translateY(-3px);
+}
+
+.product-card:active {
+  transform: scale(0.98);
+}
+
+.product-card.in-cart {
+  border-color: var(--brand-yellow);
+  background: #FFF8E7;
+  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.18);
+}
+
+/* Product Card Image */
+.product-img-wrap {
+  width: 100%;
+  height: 110px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #FFF5E0;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.product-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card-img {
+  transform: scale(1.06);
+}
+
+.product-card-fallback-icon {
+  font-size: 42px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 10px rgba(212, 136, 10, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card-fallback-icon {
+  transform: scale(1.15) rotate(4deg);
+}
+
+.product-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.product-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+
+.product-tamil {
+  font-size: 11px;
+  color: var(--text-tamil);
+  font-family: 'Noto Sans Tamil', sans-serif;
+}
+
+.product-bottom-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 8px;
+  gap: 4px;
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--brand-yellow-dark);
+}
+
+.product-size {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .product-add-btn {
   position: absolute;
-  bottom: 8px; right: 8px;
-  width: 22px; height: 22px;
+  bottom: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
   background: var(--brand-yellow);
   color: var(--brand-black);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   line-height: 1;
+  box-shadow: 0 2px 8px rgba(245, 166, 35, 0.4);
+  transition: all 0.18s ease;
 }
+
+.product-card:hover .product-add-btn {
+  transform: scale(1.1);
+  background: var(--brand-yellow-dark);
+  color: white;
+}
+
 .product-qty-badge {
   position: absolute;
-  bottom: 8px; right: 8px;
-  width: 22px; height: 22px;
+  bottom: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
   background: var(--brand-black);
   color: var(--brand-yellow);
   border-radius: 50%;
@@ -872,7 +991,8 @@ table { border-collapse: collapse; width: 100%; }
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Cart */

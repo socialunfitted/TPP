@@ -129,19 +129,34 @@ function renderProductCards(filter = '') {
     return `<div class="empty-state small"><div class="empty-icon">📦</div><p>No products found</p></div>`;
   }
 
+  const catIcons = {
+    'PARUTHI PAAL': '🥛',
+    'SWEETS': '🍬',
+    'SNACKS': '🍿',
+    'TAKE HOME': '🛍',
+    'COMBOS': '🎁'
+  };
+
   return products.map(p => {
     const inCart = cart.find(c => c.productId === p.id);
+    const icon = catIcons[p.category] || '📦';
     return `
-      <div class="product-card ${inCart ? 'in-cart' : ''} ${p.image ? 'has-image' : ''}" onclick="addToCart(${p.id})" id="prod-${p.id}">
-        ${p.image ? `
-          <div class="product-img-wrap">
+      <div class="product-card ${inCart ? 'in-cart' : ''}" onclick="addToCart(${p.id})" id="prod-${p.id}">
+        <div class="product-img-wrap">
+          ${p.image ? `
             <img src="${p.image}" class="product-card-img" alt="${escapeHTML(p.name)}">
+          ` : `
+            <span class="product-card-fallback-icon">${icon}</span>
+          `}
+        </div>
+        <div class="product-card-details">
+          <div class="product-name">${escapeHTML(p.name)}</div>
+          ${p.tamilName ? `<div class="product-tamil">${escapeHTML(p.tamilName)}</div>` : ''}
+          <div class="product-bottom-row">
+            <div class="product-price">${formatCurrency(p.price)}</div>
+            ${p.size ? `<div class="product-size">${escapeHTML(p.size)}</div>` : ''}
           </div>
-        ` : ''}
-        <div class="product-name">${escapeHTML(p.name)}</div>
-        ${p.tamilName ? `<div class="product-tamil">${escapeHTML(p.tamilName)}</div>` : ''}
-        <div class="product-price">${formatCurrency(p.price)}</div>
-        ${p.size ? `<div class="product-size">${escapeHTML(p.size)}</div>` : ''}
+        </div>
         ${inCart ? `<div class="product-qty-badge">${inCart.qty}</div>` : `<div class="product-add-btn">+</div>`}
       </div>
     `;
