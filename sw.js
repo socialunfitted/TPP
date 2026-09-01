@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   './index.html',
   './css/style.css',
   './js/qrcode.min.js',
+  './js/html2canvas.min.js',
   './js/db.js',
   './js/utils.js',
   './js/whatsapp.js',

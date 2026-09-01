@@ -89,13 +89,33 @@ function renderSettingsPage(s, branches) {
     <div class="settings-section">
       <div class="settings-section-header-row">
         <div class="settings-section-title" style="margin-bottom:0;border-bottom:none;">📍 Store Branches Management</div>
-        <button class="btn btn-sm btn-primary" onclick="showBranchModal(null)">+ Add Branch</button>
+        <button class="btn btn-sm btn-primary" onclick="showBranchModal(null)" id="add-branch-btn">+ Add Branch</button>
       </div>
       <div class="branches-list" style="margin-top:16px;">
         ${branches.length === 0 ? `
           <div class="empty-state small"><p>No separate branches added. Main branch address will be used.</p></div>
         ` : `
-          <div class="table-container">
+          <!-- Mobile card view -->
+          <div class="branch-card-list">
+            ${branches.map(b => `
+              <div class="branch-card-item${b.isDefault ? ' is-default' : ''}">
+                <div class="branch-card-body">
+                  <div class="branch-card-name">
+                    ${escapeHTML(b.name)}
+                    ${b.isDefault ? '<span class="badge badge-paid" style="margin-left:6px;font-size:10px;">Default</span>' : ''}
+                  </div>
+                  ${b.address ? `<div class="branch-card-address">📍 ${escapeHTML(b.address)}</div>` : ''}
+                  ${b.phone ? `<div class="branch-card-phone">📞 ${escapeHTML(b.phone)}</div>` : ''}
+                </div>
+                <div class="branch-card-actions">
+                  <button class="btn-icon-sm" onclick="showBranchModal(${b.id})" title="Edit">✏️</button>
+                  ${!b.isDefault ? `<button class="btn-icon-sm danger-btn" onclick="deleteBranchConfirm(${b.id})" title="Delete">🗑</button>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <!-- Desktop table view -->
+          <div class="table-container branch-table-desktop">
             <table class="data-table">
               <thead>
                 <tr>

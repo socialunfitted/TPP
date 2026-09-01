@@ -813,17 +813,15 @@ function generateInvoiceHTML(bill, settings = {}) {
         <img src="assets/logo.png" alt="Logo" class="inv-logo" onerror="this.style.display='none'">
         <h2 class="inv-store-name">${escapeHTML(storeName)}</h2>
         <div class="inv-tamil">${escapeHTML(tamilName)}</div>
-        <div class="inv-tagline">${escapeHTML(tagline)}</div>
-        ${address ? `<div class="inv-address">${escapeHTML(address)}</div>` : ''}
+        <div class="inv-tagline">"${escapeHTML(tagline)}"</div>
+        ${address ? `<div class="inv-address">📍 ${escapeHTML(address)}</div>` : ''}
         ${phone ? `<div class="inv-phone">📞 ${escapeHTML(phone)}</div>` : ''}
       </div>
       <div class="inv-divider"></div>
       <div class="inv-meta">
-        <div><strong>Bill No:</strong> ${escapeHTML(bill.billNumber)}</div>
-        <div><strong>Date:</strong> ${bill.date ? formatDate(bill.date) : ''}</div>
-        <div><strong>Time:</strong> ${bill.time || ''}</div>
-        ${bill.customerName ? `<div><strong>Customer:</strong> ${escapeHTML(bill.customerName)}</div>` : ''}
-        ${bill.customerMobile ? `<div><strong>Mobile:</strong> ${escapeHTML(bill.customerMobile)}</div>` : ''}
+        <div><strong>Bill No:</strong> ${escapeHTML(bill.billNumber || '')}</div>
+        <div><strong>Date:</strong> ${bill.date ? formatDate(bill.date) : ''} • ${bill.time || ''}</div>
+        ${bill.customerName ? `<div><strong>Customer:</strong> ${escapeHTML(bill.customerName)} ${bill.customerMobile ? `(${escapeHTML(bill.customerMobile)})` : ''}</div>` : ''}
         ${bill.orderType ? `<div><strong>Type:</strong> ${escapeHTML(bill.orderType)}</div>` : ''}
       </div>
       <div class="inv-divider"></div>
@@ -831,18 +829,18 @@ function generateInvoiceHTML(bill, settings = {}) {
         <thead>
           <tr>
             <th>Item</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th>Amount</th>
+            <th style="text-align:center;">Qty</th>
+            <th style="text-align:right;">Rate</th>
+            <th style="text-align:right;">Amount</th>
           </tr>
         </thead>
         <tbody>
           ${(bill.items || []).map(item => `
             <tr>
-              <td>${escapeHTML(item.name)}</td>
-              <td>${item.qty}</td>
-              <td>${formatCurrency(item.rate)}</td>
-              <td>${formatCurrency(item.amount)}</td>
+              <td><strong>${escapeHTML(item.name)}</strong></td>
+              <td style="text-align:center;">${item.qty}</td>
+              <td style="text-align:right;">${formatCurrency(item.rate)}</td>
+              <td style="text-align:right;"><strong>${formatCurrency(item.amount)}</strong></td>
             </tr>
           `).join('')}
         </tbody>
@@ -850,7 +848,7 @@ function generateInvoiceHTML(bill, settings = {}) {
       <div class="inv-divider"></div>
       <div class="inv-totals">
         <div class="inv-total-row"><span>Subtotal</span><span>${formatCurrency(bill.subtotal)}</span></div>
-        ${bill.discount > 0 ? `<div class="inv-total-row"><span>Discount</span><span>-${formatCurrency(bill.discount)}</span></div>` : ''}
+        ${bill.discount > 0 ? `<div class="inv-total-row" style="color:var(--danger);"><span>Discount</span><span>-${formatCurrency(bill.discount)}</span></div>` : ''}
         ${bill.tax > 0 ? `<div class="inv-total-row"><span>Tax</span><span>${formatCurrency(bill.tax)}</span></div>` : ''}
         ${bill.roundOff ? `<div class="inv-total-row"><span>Round Off</span><span>${formatCurrency(bill.roundOff)}</span></div>` : ''}
         <div class="inv-total-row grand"><span>Grand Total</span><span>${formatCurrency(bill.grandTotal)}</span></div>
@@ -860,11 +858,11 @@ function generateInvoiceHTML(bill, settings = {}) {
         ` : ''}
       </div>
       <div class="inv-divider"></div>
-      <div class="inv-payment">Payment: <strong>${escapeHTML(bill.paymentMethod)}</strong> • <strong>${escapeHTML(bill.paymentStatus)}</strong></div>
+      <div class="inv-payment">Payment: <strong>${escapeHTML(bill.paymentMethod || 'CASH')}</strong> • <strong>${escapeHTML(bill.paymentStatus || 'PAID')}</strong></div>
       ${bill.notes ? `<div class="inv-notes">Notes: ${escapeHTML(bill.notes)}</div>` : ''}
       <div class="inv-divider"></div>
       <div class="inv-footer">
-        <p>${escapeHTML(footer)}</p>
+        <p><strong>${escapeHTML(footer)}</strong></p>
         <p class="inv-footer-tagline">"${escapeHTML(tagline)}"</p>
         <p class="inv-store-footer">${escapeHTML(storeName)}</p>
       </div>

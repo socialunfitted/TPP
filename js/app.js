@@ -160,21 +160,28 @@ function renderAppLayout() {
 
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
-      <a class="mobile-nav-item active" data-page="dashboard" onclick="navigate('dashboard')" id="mobile-nav-dashboard">
-        <span>🏠</span><span>Home</span>
-      </a>
-      <a class="mobile-nav-item mobile-nav-highlight" data-page="billing" onclick="navigate('billing')" id="mobile-nav-billing">
-        <span>🧾</span><span>Bill</span>
-      </a>
-      <a class="mobile-nav-item" data-page="customers" onclick="navigate('customers')" id="mobile-nav-customers">
-        <span>👥</span><span>Customers</span>
-      </a>
-      <a class="mobile-nav-item" data-page="sales" onclick="navigate('sales')" id="mobile-nav-sales">
-        <span>📋</span><span>Sales</span>
-      </a>
-      <a class="mobile-nav-item" data-page="settings" onclick="navigate('settings')" id="mobile-nav-settings">
-        <span>⚙️</span><span>Settings</span>
-      </a>
+      <div class="mobile-nav-inner">
+        <a class="mobile-nav-item active" data-page="dashboard" onclick="navigate('dashboard')" id="mobile-nav-dashboard">
+          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">🏠</span></span>
+          <span class="mobile-nav-label">Home</span>
+        </a>
+        <a class="mobile-nav-item" data-page="billing" onclick="navigate('billing')" id="mobile-nav-billing">
+          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">🧾</span></span>
+          <span class="mobile-nav-label">Bill</span>
+        </a>
+        <a class="mobile-nav-item" data-page="customers" onclick="navigate('customers')" id="mobile-nav-customers">
+          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">👥</span></span>
+          <span class="mobile-nav-label">Customers</span>
+        </a>
+        <a class="mobile-nav-item" data-page="sales" onclick="navigate('sales')" id="mobile-nav-sales">
+          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">📋</span></span>
+          <span class="mobile-nav-label">Sales</span>
+        </a>
+        <a class="mobile-nav-item" data-page="settings" onclick="navigate('settings')" id="mobile-nav-settings">
+          <span class="mobile-nav-icon-wrap"><span class="mobile-nav-icon">⚙️</span></span>
+          <span class="mobile-nav-label">Settings</span>
+        </a>
+      </div>
     </nav>
 
     <!-- Toast Container -->

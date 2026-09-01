@@ -198,5 +198,47 @@ async function exportReportCSV() {
 }
 
 async function exportReportPDF() {
-  showToast('Report PDF export coming soon. Use CSV for now.', 'info');
+  let { start, end } = getDateRange(reportFilter);
+  if (reportFilter === 'custom') { start = reportCustomStart; end = reportCustomEnd; }
+  const allBills = await BillsDB.getAll();
+  const settings = await SettingsDB.getAll();
+  const filtered = allBills.filter(b => b.status === 'COMPLETED' && isInDateRange(b.date, start, end));
+
+  const totalRevenue = filtered.reduce((acc, b) => acc + (b.grandTotal || 0), 0);
+  const totalBills = filtered.length;
+
+  const productMap = {};
+  const paymentStats = { CASH: 0, UPI: 0, CARD: 0, CREDIT: 0 };
+
+  filtered.forEach(b => {
+    if (b.paymentMethod && paymentStats[b.paymentMethod] !== undefined) {
+      paymentStats[b.paymentMethod] += (b.grandTotal || 0);
+    }
+    (b.items || []).forEach(item => {
+      if (!productMap[item.name]) {
+        productMap[item.name] = { qty: 0, revenue: 0 };
+      }
+      productMap[item.name].qty += item.qty;
+      productMap[item.name].revenue += item.amount;
+    });
+  });
+
+  const products = Object.entries(productMap)
+    .map(([name, data]) => ({ name, qty: data.qty, revenue: data.revenue }))
+    .sort((a, b) => b.revenue - a.revenue);
+
+  const filterName = reportFilter === 'today' ? 'Today' :
+    reportFilter === 'yesterday' ? 'Yesterday' :
+    reportFilter === 'week' ? 'This Week' :
+    reportFilter === 'month' ? 'This Month' : `${start} to ${end}`;
+
+  const reportData = {
+    periodLabel: `Sales Summary (${filterName})`,
+    totalRevenue,
+    totalBills,
+    products,
+    paymentStats
+  };
+
+  await PDFService.generateReportPDF(reportData, settings);
 }
