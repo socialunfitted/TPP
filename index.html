@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#F5A623">
+  <meta name="description" content="Thanjai Paruthi Paal POS — Fast billing, customer management, sales reports and WhatsApp billing for your Paruthi Paal store.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TPP POS">
+
+  <title>Thanjai Paruthi Paal — POS Billing</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- App mounts here via app.js -->
+  <div id="app-loading" style="
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+    background:#FFFBF0;
+    gap:20px;
+    font-family:'Inter',sans-serif;
+  ">
+    <img src="assets/logo.png" alt="Thanjai Paruthi Paal" style="width:80px;height:80px;border-radius:50%;border:3px solid #F5A623;" onerror="this.style.display='none'">
+    <div style="text-align:center;">
+      <div style="font-size:20px;font-weight:800;color:#1A1A1A;letter-spacing:1px;">THANJAI PARUTHI PAAL</div>
+      <div style="font-size:14px;color:#D4A017;font-family:'Noto Sans Tamil',sans-serif;margin-top:4px;">தஞ்சை பருத்திப்பால்</div>
+    </div>
+    <div style="width:40px;height:40px;border:3px solid #E8E0D0;border-top-color:#F5A623;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  </div>
+
+  <!-- Core JS — Load in order -->
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/backup.js"></script>
+
+  <!-- Page Modules -->
+  <script src="js/pages/dashboard.js"></script>
+  <script src="js/pages/billing.js"></script>
+  <script src="js/pages/sales.js"></script>
+  <script src="js/pages/customers.js"></script>
+  <script src="js/pages/products.js"></script>
+  <script src="js/pages/reports.js"></script>
+  <script src="js/pages/expenses.js"></script>
+  <script src="js/pages/settings.js"></script>
+
+  <!-- App Router (last) -->
+  <script src="js/app.js"></script>
+</body>
+</html>
