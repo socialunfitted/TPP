@@ -86,9 +86,9 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus { border-color: var(--brand-yellow); }
 img { max-width: 100%; }
 table { border-collapse: collapse; width: 100%; }
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* Hide scrollbars globally — scroll still works */
+* { scrollbar-width: none; -ms-overflow-style: none; }
+*::-webkit-scrollbar { display: none; }
 
 /* ── LAYOUT ── */
 .sidebar-overlay {
@@ -1620,6 +1620,66 @@ table { border-collapse: collapse; width: 100%; }
 }
 .price-highlight { color: var(--brand-yellow-dark); font-size: 15px; }
 
+/* Mobile product card list — hidden on desktop, shown on mobile via media query */
+.product-card-list { display: none; flex-direction: column; gap: 8px; }
+.product-list-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.product-list-card--inactive { opacity: 0.5; }
+.plc-image {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--brand-yellow-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plc-img { width: 100%; height: 100%; object-fit: cover; }
+.plc-icon { font-size: 22px; }
+.plc-body { flex: 1; min-width: 0; }
+.plc-name { font-size: 13px; font-weight: 700; color: var(--text-primary); line-height: 1.3; }
+.plc-tamil {
+  font-size: 11px;
+  color: var(--text-tamil);
+  font-family: 'Noto Sans Tamil', sans-serif;
+  margin-top: 1px;
+}
+.plc-meta { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.plc-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-main);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.plc-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.plc-price {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--brand-yellow-dark);
+}
+.plc-toggle { cursor: pointer; }
+.plc-actions { display: flex; gap: 4px; }
+
 /* ── REPORTS PAGE ── */
 .report-grid {
   display: grid;
@@ -1942,6 +2002,140 @@ table { border-collapse: collapse; width: 100%; }
 .text-center { text-align: center; }
 .price-highlight { font-weight: 700; color: var(--brand-gold-dark); }
 
+/* ── MOBILE BILL CARDS (replaces table on small screens) ── */
+.bill-card-list { display: none; flex-direction: column; gap: 10px; }
+.bill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.bill-card:active { transform: scale(0.99); }
+.bill-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.bill-card-left { flex: 1; min-width: 0; }
+.bill-card-number {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand-gold-dark);
+  margin-bottom: 2px;
+}
+.bill-card-customer {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bill-card-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.bill-card-amount {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--brand-yellow-dark);
+  text-align: right;
+  flex-shrink: 0;
+}
+.bill-card-middle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.bill-card-items {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bill-card-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.bill-card-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 36px;
+}
+.bill-card-action-btn:active { transform: scale(0.96); }
+.bill-card-action-btn.view { border-color: var(--info); color: var(--info); }
+.bill-card-action-btn.pdf { border-color: var(--text-muted); }
+.bill-card-action-btn.whatsapp { border-color: #25D366; color: #25D366; }
+.bill-card-action-btn.delete { border-color: var(--danger); color: var(--danger); }
+
+/* ── MOBILE EXPENSE CARDS ── */
+.expense-card-list { display: none; flex-direction: column; gap: 8px; }
+.expense-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.expense-card-icon {
+  width: 42px; height: 42px;
+  background: var(--brand-yellow-pale);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.expense-card-body { flex: 1; min-width: 0; }
+.expense-card-cat { font-size: 12px; font-weight: 700; color: var(--text-primary); }
+.expense-card-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.expense-card-meta { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+.expense-card-right { text-align: right; flex-shrink: 0; }
+.expense-card-amount { font-size: 16px; font-weight: 800; color: var(--danger); }
+.expense-card-payment { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.expense-card-actions { display: flex; gap: 4px; margin-top: 4px; justify-content: flex-end; }
+
+/* ── MOBILE FILTER BAR ── */
+.mobile-filter-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  flex-shrink: 0;
+}
+.mobile-filter-scroll::-webkit-scrollbar { display: none; }
+
 /* ── RESPONSIVE BREAKPOINTS & MOBILE FIXES ── */
 
 @media (max-width: 1200px) {
@@ -1960,21 +2154,33 @@ table { border-collapse: collapse; width: 100%; }
   .topbar-logo, .topbar-title span { display: flex; display: block; }
   .mobile-bottom-nav { display: flex; }
   .page-content {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-    max-height: calc(100vh - var(--topbar-height));
+    padding: 16px 16px calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+    max-height: none;
+    overflow-y: auto;
   }
-  /* Show branch cards, hide table on mobile */
+  /* Branch: show cards, hide table */
   .branch-card-list { display: flex; }
   .branch-table-desktop { display: none; }
+  /* Bills: show cards, hide table */
+  .bill-card-list { display: flex; }
+  .bill-table-desktop { display: none; }
+  /* Expenses: show cards, hide table */
+  .expense-card-list { display: flex; }
+  .expense-table-desktop { display: none; }
+  /* Products: show cards, hide table */
+  .product-card-list { display: flex; }
+  .product-table-desktop { display: none; }
 }
 
 @media (max-width: 768px) {
   /* ─ Layout ─ */
-  .page-content { padding: 14px 14px calc(90px + env(safe-area-inset-bottom, 0px)) !important; }
+  .page-content { padding: 14px 14px calc(100px + env(safe-area-inset-bottom, 0px)) !important; }
   .page-header { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 16px; }
-  .page-header .header-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+  .page-header .header-actions { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
+  .page-header .header-actions .btn { flex: 1; min-width: 120px; justify-content: center; min-height: 40px; }
   .page-title { font-size: 20px; }
-  .section-label { margin: 18px 0 10px; }
+  .page-subtitle { font-size: 13px; }
+  .section-label { margin: 16px 0 10px; font-size: 10px; }
 
   /* ─ Grids ─ */
   .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -1984,51 +2190,71 @@ table { border-collapse: collapse; width: 100%; }
   .report-grid { grid-template-columns: 1fr; gap: 12px; }
   .customer-cards, .customer-cards-grid { grid-template-columns: 1fr; }
   .settings-grid { grid-template-columns: 1fr; }
-  .expense-summary { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .expense-summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .form-row { grid-template-columns: 1fr; gap: 12px; }
 
-  /* ─ Tables ─ */
-  .table-container { border-radius: var(--radius-md); }
-  .data-table { font-size: 12px; min-width: 440px; }
-  .data-table td, .data-table th { padding: 10px 12px; }
-
   /* ─ Filter bar ─ */
-  .filter-bar { gap: 8px; }
-  .date-filters { gap: 4px; overflow-x: auto; padding-bottom: 2px; flex-wrap: nowrap; }
-  .date-filters::-webkit-scrollbar { display: none; }
-  .filter-btn { padding: 7px 14px; font-size: 12px; min-height: 36px; flex-shrink: 0; }
+  .filter-bar {
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .date-filters { gap: 4px; flex-wrap: nowrap; flex-shrink: 0; }
+  .filter-btn { padding: 8px 14px; font-size: 12px; min-height: 38px; flex-shrink: 0; white-space: nowrap; }
+  .search-box { min-width: 160px; }
+  .search-box input { padding: 9px 14px; font-size: 13px; }
 
   /* ─ Settings ─ */
-  .settings-section { padding: 16px; }
+  .settings-section { padding: 16px; margin-bottom: 12px; }
   .settings-section-header-row {
     flex-wrap: nowrap;
     gap: 10px;
     align-items: center;
     justify-content: space-between;
   }
-  /* Backup cards: keep horizontal but button full-width below */
+  .settings-section-title { font-size: 13px; }
+  /* Backup cards: stack properly */
   .backup-card {
-    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
     gap: 12px;
   }
-  .backup-card .backup-icon { font-size: 26px; }
+  .backup-card .backup-info { flex: 1; min-width: 0; }
   .backup-card .btn, .backup-card label.btn {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-    min-height: 44px;
+    flex-shrink: 0;
+    min-height: 42px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   /* ─ Modals ─ */
-  .modal-overlay { padding: 12px; align-items: flex-end; }
-  .modal-box { border-radius: var(--radius-lg) var(--radius-lg) 0 0; max-width: 100%; max-height: 90vh; }
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal-box {
+    border-radius: 20px 20px 0 0;
+    max-width: 100%;
+    max-height: 92vh;
+  }
   .modal-box.modal-lg { max-width: 100%; }
-  .modal-footer { flex-wrap: wrap; gap: 8px; }
-  .modal-footer .btn { flex: 1; min-width: 120px; }
+  .modal-footer { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+  .modal-footer .btn { flex: 1; min-width: 120px; min-height: 44px; }
+  /* Modal drag handle */
+  .modal-box::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 10px auto 0;
+  }
 
   /* ─ Success modal ─ */
   .success-actions { flex-wrap: wrap; }
-  .success-actions .btn { flex: 1; min-width: 120px; }
+  .success-actions .btn { flex: 1; min-width: 120px; min-height: 44px; }
 
   /* ─ POS Layout ─ */
   .pos-layout {
@@ -2042,7 +2268,7 @@ table { border-collapse: collapse; width: 100%; }
     inset: 0;
     z-index: 995;
     border-radius: 0;
-    padding-bottom: 70px;
+    padding-bottom: 80px;
     background: #FFFFFF;
     overflow-y: auto;
   }
@@ -2058,14 +2284,15 @@ table { border-collapse: collapse; width: 100%; }
 
   /* ─ KPI Cards ─ */
   .kpi-card { padding: 14px; }
-  .kpi-value { font-size: 22px; }
+  .kpi-value { font-size: 20px; }
   .kpi-icon { font-size: 20px; margin-bottom: 6px; }
 }
 
 @media (max-width: 480px) {
   /* ─ Layout ─ */
-  .page-content { padding: 12px 12px calc(90px + env(safe-area-inset-bottom, 0px)) !important; }
+  .page-content { padding: 12px 12px calc(100px + env(safe-area-inset-bottom, 0px)) !important; }
   .page-title { font-size: 18px; }
+  .page-subtitle { font-size: 12px; }
 
   /* ─ KPI ─ */
   .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -2076,44 +2303,53 @@ table { border-collapse: collapse; width: 100%; }
 
   /* ─ Quick Actions ─ */
   .quick-actions { grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .quick-btn { padding: 10px 6px; font-size: 11px; }
+  .quick-btn { padding: 10px 6px; }
   .qa-icon { font-size: 18px; }
   .qa-text { font-size: 10px; }
 
-  /* ─ Payment Grids ─ */
+  /* ─ Payment/Stats Grids ─ */
   .payment-grid { grid-template-columns: 1fr 1fr; }
   .stats-row { grid-template-columns: 1fr 1fr; }
-  .expense-summary { grid-template-columns: 1fr; }
+  .expense-summary { grid-template-columns: 1fr; gap: 8px; }
 
   /* ─ Modals ─ */
-  .modal-overlay { padding: 0; }
-  .modal-box { border-radius: var(--radius-xl) var(--radius-xl) 0 0; max-height: 95vh; }
-  .modal-body { padding: 16px; gap: 12px; }
-  .modal-header { padding: 14px 16px; }
-  .modal-footer { padding: 12px 16px; flex-direction: column; }
+  .modal-box { max-height: 95vh; }
+  .modal-body { padding: 14px 16px; gap: 12px; }
+  .modal-header { padding: 12px 16px; }
+  .modal-header h3 { font-size: 15px; }
+  .modal-footer { padding: 10px 14px; flex-direction: column; }
   .modal-footer .btn { width: 100%; }
 
-  /* ─ Tables ─ */
-  .data-table { font-size: 11px; min-width: 380px; }
-  .data-table td, .data-table th { padding: 8px 10px; }
-
   /* ─ Filters ─ */
-  .filter-btn { padding: 6px 12px; font-size: 11px; min-height: 36px; }
+  .filter-btn { padding: 7px 12px; font-size: 11px; min-height: 36px; }
 
-  /* ─ Bill view modal footer ─ */
+  /* ─ Bill view modal ─ */
   .bill-view-modal .modal-footer { gap: 6px; }
-  .bill-view-modal .modal-footer .btn { flex: 1; font-size: 11px; padding: 8px 6px; min-width: 0; }
+  .bill-view-modal .modal-footer .btn { flex: 1; font-size: 11px; padding: 8px 6px; min-width: 0; flex-direction: column; }
 
   /* ─ Settings ─ */
   .settings-section { padding: 14px 12px; }
   .settings-grid { grid-template-columns: 1fr; gap: 12px; }
+  /* Backup cards stack on very small screens */
+  .backup-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .backup-card .btn, .backup-card label.btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    min-height: 44px;
+  }
 
   /* ─ Customer cards ─ */
   .cust-card-stats-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .cc-stat-val { font-size: 13px; }
 
-  /* ─ Branch cards on small phones ─ */
-  .branch-card-name { font-size: 13px; }
+  /* ─ Bill cards ─ */
+  .bill-card-amount { font-size: 18px; }
+  .bill-card-action-btn { font-size: 11px; padding: 7px 4px; }
 }
 
 /* ── PRINT STYLES ── */
@@ -2122,7 +2358,10 @@ table { border-collapse: collapse; width: 100%; }
   .modal-footer, .modal-header .modal-close,
   .topbar-actions, #toast-container { display: none !important; }
   .main-area { margin-left: 0; }
-  .page-content { padding: 0; }
+  .page-content { padding: 0 !important; }
   body { background: white; }
   .invoice-doc { max-width: 100%; }
+  .bill-card-list, .expense-card-list, .product-card-list { display: none !important; }
+  .bill-table-desktop, .expense-table-desktop, .product-table-desktop { display: block !important; }
 }
+

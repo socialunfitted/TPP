@@ -176,7 +176,37 @@ async function renderDashboard() {
           <button class="btn btn-primary" onclick="navigate('billing')">+ New Bill</button>
         </div>
       ` : `
-        <div class="table-container">
+        <!-- Mobile card view -->
+        <div class="bill-card-list">
+          ${recentBills.map(b => `
+            <div class="bill-card">
+              <div class="bill-card-top">
+                <div class="bill-card-left">
+                  <div class="bill-card-number">${escapeHTML(b.billNumber)}${b.isDemo ? ' <span class="demo-tag">DEMO</span>' : ''}</div>
+                  <div class="bill-card-customer">${escapeHTML(b.customerName || 'Walk-in Customer')}</div>
+                  <div class="bill-card-time">${b.time || ''}${b.date ? ' • ' + formatDate(b.date) : ''}</div>
+                </div>
+                <div>
+                  <div class="bill-card-amount">${formatCurrency(b.grandTotal)}</div>
+                  <div style="text-align:right;margin-top:4px;">
+                    <span class="badge ${getPaymentBadgeClass(b.paymentMethod)}">${escapeHTML(b.paymentMethod)}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bill-card-middle">
+                <span class="bill-card-items">📦 ${(b.items || []).slice(0,3).map(i => i.name.replace('Paruthi Paal ','') + ' ×' + i.qty).join(', ')}${(b.items||[]).length > 3 ? '…' : ''}</span>
+                <span class="badge ${getStatusBadgeClass(b.paymentStatus)}">${escapeHTML(b.paymentStatus)}</span>
+              </div>
+              <div class="bill-card-actions">
+                <button class="bill-card-action-btn view" onclick="viewBillModal(${b.id})">👁 View</button>
+                <button class="bill-card-action-btn pdf" onclick="downloadBillPDF(${b.id})">📄 PDF</button>
+                <button class="bill-card-action-btn whatsapp" onclick="whatsappBill(${b.id})">💬 WA</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <!-- Desktop table view -->
+        <div class="table-container bill-table-desktop">
           <table class="data-table">
             <thead>
               <tr>

@@ -68,11 +68,46 @@ function renderProductsPage(products, categories) {
           <h3 class="category-title">${escapeHTML(cat)}</h3>
           <span class="category-count">${prods.length} items</span>
         </div>
-        <div class="product-table-wrap">
+
+        <!-- ── MOBILE PRODUCT CARDS ── -->
+        <div class="product-card-list">
+          ${prods.sort((a,b) => (a.sortOrder||99)-(b.sortOrder||99)).map(p => `
+            <div class="product-list-card${p.active === false ? ' product-list-card--inactive' : ''}">
+              <div class="plc-image">
+                ${p.image
+                  ? `<img src="${p.image}" alt="${escapeHTML(p.name)}" class="plc-img">`
+                  : `<div class="plc-icon">🥛</div>`}
+              </div>
+              <div class="plc-body">
+                <div class="plc-name">${escapeHTML(p.name)}</div>
+                ${p.tamilName ? `<div class="plc-tamil">${escapeHTML(p.tamilName)}</div>` : ''}
+                <div class="plc-meta">
+                  ${p.size ? `<span class="plc-tag">📏 ${escapeHTML(p.size)}</span>` : ''}
+                  ${p.costPrice ? `<span class="plc-tag">Cost: ${formatCurrency(p.costPrice)}</span>` : ''}
+                </div>
+              </div>
+              <div class="plc-right">
+                <div class="plc-price">${formatCurrency(p.price)}</div>
+                <label class="toggle-switch plc-toggle" title="${p.active !== false ? 'Disable' : 'Enable'}">
+                  <input type="checkbox" ${p.active !== false ? 'checked' : ''}
+                    onchange="toggleProduct(${p.id}, this.checked)">
+                  <span class="toggle-slider"></span>
+                </label>
+                <div class="plc-actions">
+                  <button class="btn-icon-sm" onclick="showProductModal(${p.id})" title="Edit">✏️</button>
+                  <button class="btn-icon-sm danger-btn" onclick="deleteProductConfirm(${p.id})" title="Delete">🗑</button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- ── DESKTOP TABLE ── -->
+        <div class="product-table-wrap product-table-desktop">
           <table class="data-table">
             <thead>
               <tr>
-                <th style="width: 50px;">Image</th>
+                <th style="width:50px;">Image</th>
                 <th>Product Name</th>
                 <th>Tamil Name</th>
                 <th>Size</th>
@@ -83,14 +118,12 @@ function renderProductsPage(products, categories) {
               </tr>
             </thead>
             <tbody>
-              ${prods.sort((a,b) => (a.sortOrder || 99) - (b.sortOrder || 99)).map(p => `
+              ${prods.sort((a,b) => (a.sortOrder||99)-(b.sortOrder||99)).map(p => `
                 <tr class="${p.active === false ? 'row-inactive' : ''}">
                   <td>
-                    ${p.image ? `
-                      <img src="${p.image}" alt="${escapeHTML(p.name)}" class="table-prod-img">
-                    ` : `
-                      <div class="table-prod-icon">🥛</div>
-                    `}
+                    ${p.image
+                      ? `<img src="${p.image}" alt="${escapeHTML(p.name)}" class="table-prod-img">`
+                      : `<div class="table-prod-icon">🥛</div>`}
                   </td>
                   <td><strong>${escapeHTML(p.name)}</strong></td>
                   <td>${escapeHTML(p.tamilName || '')}</td>
@@ -99,7 +132,7 @@ function renderProductsPage(products, categories) {
                   <td><strong class="price-highlight">${formatCurrency(p.price)}</strong></td>
                   <td>
                     <label class="toggle-switch" title="${p.active !== false ? 'Disable' : 'Enable'}">
-                      <input type="checkbox" ${p.active !== false ? 'checked' : ''} 
+                      <input type="checkbox" ${p.active !== false ? 'checked' : ''}
                         onchange="toggleProduct(${p.id}, this.checked)">
                       <span class="toggle-slider"></span>
                     </label>

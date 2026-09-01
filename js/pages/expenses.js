@@ -101,7 +101,31 @@ function renderExpensesPage(allExpenses, allBills) {
         <button class="btn btn-primary" onclick="showAddExpenseModal()">+ Add Expense</button>
       </div>
     ` : `
-      <div class="table-container">
+      <!-- Mobile expense cards -->
+      <div class="expense-card-list">
+        ${expenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(e => {
+          const catIcons = { Ingredients:'🌿', Gas:'🔥', Electricity:'⚡', Rent:'🏠', Salary:'👤', Packaging:'📦', Transport:'🚗', Maintenance:'🔧', Other:'💰' };
+          const icon = catIcons[e.category] || '💰';
+          return `
+          <div class="expense-card">
+            <div class="expense-card-icon">${icon}</div>
+            <div class="expense-card-body">
+              <div class="expense-card-cat">${escapeHTML(e.category)}</div>
+              ${e.description ? `<div class="expense-card-desc">${escapeHTML(e.description)}</div>` : ''}
+              <div class="expense-card-meta">${e.date ? formatDate(e.date) : ''} • ${escapeHTML(e.paymentMethod || 'CASH')}</div>
+            </div>
+            <div class="expense-card-right">
+              <div class="expense-card-amount">-${formatCurrency(e.amount)}</div>
+              <div class="expense-card-actions">
+                <button class="btn-icon-sm" onclick="showEditExpenseModal(${e.id})" title="Edit">✏️</button>
+                <button class="btn-icon-sm danger-btn" onclick="deleteExpenseConfirm(${e.id})" title="Delete">🗑</button>
+              </div>
+            </div>
+          </div>
+        `}).join('')}
+      </div>
+      <!-- Desktop table -->
+      <div class="table-container expense-table-desktop">
         <table class="data-table">
           <thead>
             <tr>
